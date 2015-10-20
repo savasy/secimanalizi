@@ -9,21 +9,29 @@ class Metin:
   self.nplist=nplist
   self.text=self.loadfile(afile)
   self.elim()
+
  def loadfile(self,afile):
   text=[]
   with open(afile) as f:
    for line in f:
-    line=self.npbuild(line.strip().lower()) 
-    text =text+ line.strip().split() 
-  return text 
+    line=self.lowerTR(line)
+    line=self.npbuild(line.strip()) 
+    text =text+ nltk.word_tokenize(line.strip())
+  return text
+ 
+ def lowerTR(self,line):
+  line = line.replace("I","ı")
+  line = line.replace("İ","i")
+  return line.lower()
+
  def elim(self): 
   self.text= [w for w in self.text if w not in self.stop]
+ 
  def npbuild(self, aline):
   for np in self.nplist:
-   if(np in aline):
-    print(np,aline) 
-    newnp=np.replace(" ","_") 
-    aline=aline.replace(np, newnp)
+   npOrigin=np.replace("_"," ")
+   if(npOrigin in aline):
+    aline=aline.replace(npOrigin, np)
   return aline
 
   
